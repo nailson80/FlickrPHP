@@ -18,12 +18,12 @@
  *
  */
 namespace FlickrPHP;
-if ( !class_exists('FlickrPHP') ) {
+if ( !class_exists('phpFlickr') ) {
 	if (session_id() == "") {
 		@session_start();
 	}
 
-	class FlickrPHP {
+	class phpFlickr {
 		var $api_key;
 		var $secret;
 
