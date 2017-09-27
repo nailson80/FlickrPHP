@@ -1,7 +1,7 @@
 <?php
-/* FlickrPHP
+/* phpFlickr
  * Written by Dan Coulter (dan@dancoulter.com)
- * Project Home Page: http://github.com/dancoulter/FlickrPHP
+ * Project Home Page: http://github.com/dancoulter/phpflickr
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-namespace FlickrPHP;
-
 if ( !class_exists('FlickrPHP') ) {
 	if (session_id() == "") {
 		@session_start();
@@ -43,7 +41,7 @@ if ( !class_exists('FlickrPHP') ) {
 		var $last_request = null;
 		var $die_on_error;
 		var $error_code;
-		var $error_msg;
+		Var $error_msg;
 		var $token;
 		var $php_version;
 		var $custom_post = null, $custom_cache_get = null, $custom_cache_set = null;
@@ -60,7 +58,7 @@ if ( !class_exists('FlickrPHP') ) {
 		 */
 		var $max_cache_rows = 1000;
 
-		function FlickrPHP ($api_key, $secret = NULL, $die_on_error = false) {
+		function phpFlickr ($api_key, $secret = NULL, $die_on_error = false) {
 			//The API Key must be set before any calls can be made.  You can
 			//get your own at https://www.flickr.com/services/api/misc.api_keys.html
 			$this->api_key = $api_key;
@@ -282,8 +280,8 @@ if ( !class_exists('FlickrPHP') ) {
 			$args = array_merge(array("method" => $command, "format" => "json", "nojsoncallback" => "1", "api_key" => $this->api_key), $args);
 			if (!empty($this->token)) {
 				$args = array_merge($args, array("auth_token" => $this->token));
-			} elseif (!empty($_SESSION['FlickrPHP_auth_token'])) {
-				$args = array_merge($args, array("auth_token" => $_SESSION['FlickrPHP_auth_token']));
+			} elseif (!empty($_SESSION['phpFlickr_auth_token'])) {
+				$args = array_merge($args, array("auth_token" => $_SESSION['phpFlickr_auth_token']));
 			}
 			ksort($args);
 			$auth_sig = "";
@@ -348,7 +346,7 @@ if ( !class_exists('FlickrPHP') ) {
 		}
 
 		function setProxy ($server, $port) {
-			// Sets the proxy for all FlickrPHP calls.
+			// Sets the proxy for all phpFlickr calls.
 			$this->req->setProxy($server, $port);
 		}
 
@@ -410,8 +408,8 @@ if ( !class_exists('FlickrPHP') ) {
 				$args = array("api_key" => $this->api_key, "title" => $title, "description" => $description, "tags" => $tags, "is_public" => $is_public, "is_friend" => $is_friend, "is_family" => $is_family);
 				if (!empty($this->token)) {
 					$args = array_merge($args, array("auth_token" => $this->token));
-				} elseif (!empty($_SESSION['FlickrPHP_auth_token'])) {
-					$args = array_merge($args, array("auth_token" => $_SESSION['FlickrPHP_auth_token']));
+				} elseif (!empty($_SESSION['phpFlickr_auth_token'])) {
+					$args = array_merge($args, array("auth_token" => $_SESSION['phpFlickr_auth_token']));
 				}
 
 				ksort($args);
@@ -472,8 +470,8 @@ if ( !class_exists('FlickrPHP') ) {
 				$args = array("async" => 1, "api_key" => $this->api_key, "title" => $title, "description" => $description, "tags" => $tags, "is_public" => $is_public, "is_friend" => $is_friend, "is_family" => $is_family);
 				if (!empty($this->token)) {
 					$args = array_merge($args, array("auth_token" => $this->token));
-				} elseif (!empty($_SESSION['FlickrPHP_auth_token'])) {
-					$args = array_merge($args, array("auth_token" => $_SESSION['FlickrPHP_auth_token']));
+				} elseif (!empty($_SESSION['phpFlickr_auth_token'])) {
+					$args = array_merge($args, array("auth_token" => $_SESSION['phpFlickr_auth_token']));
 				}
 
 				ksort($args);
@@ -533,8 +531,8 @@ if ( !class_exists('FlickrPHP') ) {
 				$args = array("api_key" => $this->api_key, "photo_id" => $photo_id, "async" => $async);
 				if (!empty($this->token)) {
 					$args = array_merge($args, array("auth_token" => $this->token));
-				} elseif (!empty($_SESSION['FlickrPHP_auth_token'])) {
-					$args = array_merge($args, array("auth_token" => $_SESSION['FlickrPHP_auth_token']));
+				} elseif (!empty($_SESSION['phpFlickr_auth_token'])) {
+					$args = array_merge($args, array("auth_token" => $_SESSION['phpFlickr_auth_token']));
 				}
 
 				ksort($args);
@@ -595,11 +593,11 @@ if ( !class_exists('FlickrPHP') ) {
 			// If remember_uri is set to false, the callback script (included) will
 			// redirect to its default page.
 
-			if (empty($_SESSION['FlickrPHP_auth_token']) && empty($this->token)) {
+			if (empty($_SESSION['phpFlickr_auth_token']) && empty($this->token)) {
 				if ( $remember_uri === true ) {
-					$_SESSION['FlickrPHP_auth_redirect'] = $_SERVER['REQUEST_URI'];
+					$_SESSION['phpFlickr_auth_redirect'] = $_SERVER['REQUEST_URI'];
 				} elseif ( $remember_uri !== false ) {
-					$_SESSION['FlickrPHP_auth_redirect'] = $remember_uri;
+					$_SESSION['phpFlickr_auth_redirect'] = $remember_uri;
 				}
 				$api_sig = md5($this->secret . "api_key" . $this->api_key . "perms" . $perms);
 
@@ -614,7 +612,7 @@ if ( !class_exists('FlickrPHP') ) {
 				$this->die_on_error = false;
 				$rsp = $this->auth_checkToken();
 				if ($this->error_code !== false) {
-					unset($_SESSION['FlickrPHP_auth_token']);
+					unset($_SESSION['phpFlickr_auth_token']);
 					$this->auth($perms, $remember_uri);
 				}
 				$this->die_on_error = $tmp;
@@ -629,11 +627,11 @@ if ( !class_exists('FlickrPHP') ) {
 
 		/*******************************
 
-		To use the FlickrPHP::call method, pass a string containing the API method you want
+		To use the phpFlickr::call method, pass a string containing the API method you want
 		to use and an associative array of arguments.  For example:
 			$result = $f->call("flickr.photos.comments.getList", array("photo_id"=>'34952612'));
 		This method will allow you to make calls to arbitrary methods that haven't been
-		implemented in FlickrPHP yet.
+		implemented in phpFlickr yet.
 
 		*******************************/
 
@@ -686,7 +684,7 @@ if ( !class_exists('FlickrPHP') ) {
 		function auth_getToken ($frob) {
 			/* https://www.flickr.com/services/api/flickr.auth.getToken.html */
 			$this->request('flickr.auth.getToken', array('frob'=>$frob));
-			$_SESSION['FlickrPHP_auth_token'] = $this->parsed_response['auth']['token'];
+			$_SESSION['phpFlickr_auth_token'] = $this->parsed_response['auth']['token'];
 			return $this->parsed_response ? $this->parsed_response['auth'] : false;
 		}
 
@@ -1700,23 +1698,23 @@ if ( !class_exists('FlickrPHP') ) {
 	}
 }
 
-if ( !class_exists('FlickrPHP_pager') ) {
-	class FlickrPHP_pager {
-		var $FlickrPHP, $per_page, $method, $args, $results, $global_FlickrPHP;
+if ( !class_exists('phpFlickr_pager') ) {
+	class phpFlickr_pager {
+		var $phpFlickr, $per_page, $method, $args, $results, $global_phpFlickr;
 		var $total = null, $page = 0, $pages = null, $photos, $_extra = null;
 
 
-		function FlickrPHP_pager($FlickrPHP, $method = null, $args = null, $per_page = 30) {
+		function phpFlickr_pager($phpFlickr, $method = null, $args = null, $per_page = 30) {
 			$this->per_page = $per_page;
 			$this->method = $method;
 			$this->args = $args;
-			$this->set_FlickrPHP($FlickrPHP);
+			$this->set_phpFlickr($phpFlickr);
 		}
 
-		function set_FlickrPHP($FlickrPHP) {
-			if ( is_a($FlickrPHP, 'FlickrPHP') ) {
-				$this->FlickrPHP = $FlickrPHP;
-				if ( $this->FlickrPHP->cache ) {
+		function set_phpFlickr($phpFlickr) {
+			if ( is_a($phpFlickr, 'phpFlickr') ) {
+				$this->phpFlickr = $phpFlickr;
+				if ( $this->phpFlickr->cache ) {
 					$this->args['per_page'] = 500;
 				} else {
 					$this->args['per_page'] = (int) $this->per_page;
@@ -1741,12 +1739,12 @@ if ( !class_exists('FlickrPHP_pager') ) {
 			);
 			if ( !in_array($this->method, array_keys($allowed_methods)) ) return false;
 
-			if ( $this->FlickrPHP->cache ) {
+			if ( $this->phpFlickr->cache ) {
 				$min = ($page - 1) * $this->per_page;
 				$max = $page * $this->per_page - 1;
 				if ( floor($min/500) == floor($max/500) ) {
 					$this->args['page'] = floor($min/500) + 1;
-					$this->results = $this->FlickrPHP->call($this->method, $this->args);
+					$this->results = $this->phpFlickr->call($this->method, $this->args);
 					if ( $this->results ) {
 						$this->results = $this->results[$allowed_methods[$this->method]];
 						$this->photos = array_slice($this->results['photo'], $min % 500, $this->per_page);
@@ -1758,7 +1756,7 @@ if ( !class_exists('FlickrPHP_pager') ) {
 					}
 				} else {
 					$this->args['page'] = floor($min/500) + 1;
-					$this->results = $this->FlickrPHP->call($this->method, $this->args);
+					$this->results = $this->phpFlickr->call($this->method, $this->args);
 					if ( $this->results ) {
 						$this->results = $this->results[$allowed_methods[$this->method]];
 
@@ -1767,7 +1765,7 @@ if ( !class_exists('FlickrPHP_pager') ) {
 						$this->pages = ceil($this->results['total'] / $this->per_page);
 
 						$this->args['page'] = floor($min/500) + 2;
-						$this->results = $this->FlickrPHP->call($this->method, $this->args);
+						$this->results = $this->phpFlickr->call($this->method, $this->args);
 						if ( $this->results ) {
 							$this->results = $this->results[$allowed_methods[$this->method]];
 							$this->photos = array_merge($this->photos, array_slice($this->results['photo'], 0, $max % 500 + 1));
@@ -1780,7 +1778,7 @@ if ( !class_exists('FlickrPHP_pager') ) {
 				}
 			} else {
 				$this->args['page'] = $page;
-				$this->results = $this->FlickrPHP->call($this->method, $this->args);
+				$this->results = $this->phpFlickr->call($this->method, $this->args);
 				if ( $this->results ) {
 					$this->results = $this->results[$allowed_methods[$this->method]];
 
