@@ -1,13 +1,15 @@
 {
-    "name": “nailson80/flickrphp”,
-    "description": “PHP wrapper for Flickr based on the work of Dan Coulter”,
+    "name": "nailson80/flickrphp",
+    "description": "PHP wrapper for Flickr based on the work of Dan Coulte",
     "type": "library",
     "keywords": [
         "flickr"
     ],
+    "homepage": "http://packages.zendframework.com/",
+    "license": "GNU",
     "autoload": {
         "psr-0": {
-            "FlickrPHP\\”: “src/“
+            "FlickrPHP\\": "src/"
         }
     }
 }
