@@ -18,6 +18,7 @@
  *
  */
 namespace FlickrPHP;
+
 if ( !class_exists('phpFlickr') ) {
 	if (session_id() == "") {
 		@session_start();
