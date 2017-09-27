@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+namespace FlickrPHP;
 if ( !class_exists('FlickrPHP') ) {
 	if (session_id() == "") {
 		@session_start();

@@ -5,7 +5,6 @@
     "keywords": [
         "flickr"
     ],
-    "homepage": "http://packages.zendframework.com/",
     "license": "GNU",
     "autoload": {
         "psr-0": {
